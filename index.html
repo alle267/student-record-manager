@@ -1,0 +1,529 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Student Record Manager | Alle Emmanuel</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f6fb;
+      color: #172033;
+      padding: 30px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    header h1 {
+      font-size: 28px;
+    }
+
+    header p {
+      color: #737d91;
+      margin-top: 8px;
+    }
+
+    .tag {
+      background: #e2eaff;
+      color: #2857c5;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .panel, .card {
+      background: white;
+      padding: 22px;
+      border-radius: 14px;
+      box-shadow: 0 4px 18px #17203308;
+    }
+
+    .profile {
+      margin-bottom: 25px;
+      border-left: 4px solid #315fe5;
+    }
+
+    .profile h2, .panel h2 {
+      font-size: 19px;
+      margin-bottom: 18px;
+    }
+
+    .profile p {
+      margin-top: 10px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 25px;
+    }
+
+    .card p {
+      color: #737d91;
+      font-size: 14px;
+    }
+
+    .card h2 {
+      margin-top: 12px;
+      font-size: 30px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #dce1eb;
+      border-radius: 8px;
+      background: white;
+      font-size: 14px;
+    }
+
+    input:focus, select:focus {
+      outline: 2px solid #cbd8ff;
+      border-color: #315fe5;
+    }
+
+    button {
+      padding: 11px 16px;
+      border: none;
+      border-radius: 8px;
+      background: #315fe5;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      opacity: 0.88;
+    }
+
+    .submit-btn {
+      margin-top: 18px;
+    }
+
+    .search {
+      max-width: 350px;
+      margin-bottom: 18px;
+    }
+
+    .records-panel {
+      margin-top: 25px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      min-width: 650px;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 14px 12px;
+      border-bottom: 1px solid #edf0f5;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    th {
+      color: #737d91;
+      background: #f8f9fc;
+    }
+
+    .delete-btn {
+      background: #ffe8e8;
+      color: #c53030;
+      margin-left: 5px;
+    }
+
+    .empty {
+      text-align: center;
+      color: #737d91;
+      padding: 28px;
+    }
+
+    footer {
+      text-align: center;
+      color: #737d91;
+      font-size: 13px;
+      margin-top: 30px;
+      line-height: 1.8;
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding: 16px;
+      }
+
+      .stats, .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      header h1 {
+        font-size: 23px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div>
+      <h1>Student Record Manager</h1>
+      <p>A simple application for managing student information.</p>
+    </div>
+
+    <div class="tag">COMPUTER SCIENCE</div>
+  </header>
+
+  <section class="panel profile">
+    <h2>Developer Information</h2>
+
+    <p>
+      <strong>Full Name:</strong>
+      ALLE EMMANUEL OLUWASEMILORE
+    </p>
+
+    <p>
+      <strong>Matric Number:</strong>
+      LCU/UG/25/35463
+    </p>
+
+    <p>
+      <strong>Department:</strong>
+      Computer Science
+    </p>
+
+    <p>
+      <strong>Institution:</strong>
+      Lead City University
+    </p>
+
+    <p>
+      <strong>Project:</strong>
+      Student Record Management System
+    </p>
+  </section>
+
+  <section class="stats">
+    <div class="card">
+      <p>Total Students</p>
+      <h2 id="totalStudents">0</h2>
+    </div>
+
+    <div class="card">
+      <p>Departments</p>
+      <h2 id="totalDepartments">0</h2>
+    </div>
+
+    <div class="card">
+      <p>Registered Levels</p>
+      <h2 id="totalLevels">0</h2>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2 id="formTitle">Add New Student</h2>
+
+    <form id="studentForm">
+      <div class="form-grid">
+
+        <div>
+          <label for="name">Full Name</label>
+          <input id="name" required placeholder="Enter full name">
+        </div>
+
+        <div>
+          <label for="matric">Matric Number</label>
+          <input id="matric" required placeholder="Enter matric number">
+        </div>
+
+        <div>
+          <label for="department">Department</label>
+          <select id="department" required>
+            <option value="">Select department</option>
+            <option>Computer Science</option>
+            <option>Cybersecurity</option>
+            <option>Software Engineering</option>
+            <option>Information Technology</option>
+            <option>Mass Communication</option>
+            <option>Accounting</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="level">Level</label>
+          <select id="level" required>
+            <option value="">Select level</option>
+            <option>100 Level</option>
+            <option>200 Level</option>
+            <option>300 Level</option>
+            <option>400 Level</option>
+            <option>500 Level</option>
+          </select>
+        </div>
+
+      </div>
+
+      <button class="submit-btn" id="submitBtn" type="submit">
+        Add Student
+      </button>
+    </form>
+  </section>
+
+  <section class="panel records-panel">
+    <h2>Student Records</h2>
+
+    <input
+      class="search"
+      id="search"
+      placeholder="Search name, matric number or department..."
+    >
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Full Name</th>
+            <th>Matric Number</th>
+            <th>Department</th>
+            <th>Level</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody id="studentList"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <p>Student Record Management System</p>
+    <p>Developed by Alle Emmanuel Oluwasemilore</p>
+    <p>Computer Science | Lead City University</p>
+    <p>Personal learning project</p>
+  </footer>
+
+  <script>
+    const form = document.getElementById("studentForm");
+    const studentList = document.getElementById("studentList");
+    const search = document.getElementById("search");
+
+    let students = JSON.parse(
+      localStorage.getItem("studentRecords") || "[]"
+    );
+
+    let editingId = null;
+
+    function saveStudents() {
+      localStorage.setItem(
+        "studentRecords",
+        JSON.stringify(students)
+      );
+    }
+
+    function updateDashboard() {
+      document.getElementById("totalStudents").textContent =
+        students.length;
+
+      document.getElementById("totalDepartments").textContent =
+        new Set(students.map(s => s.department)).size;
+
+      document.getElementById("totalLevels").textContent =
+        new Set(students.map(s => s.level)).size;
+    }
+
+    function renderStudents() {
+      const query = search.value.trim().toLowerCase();
+
+      const filtered = students.filter(student =>
+        student.name.toLowerCase().includes(query) ||
+        student.matric.toLowerCase().includes(query) ||
+        student.department.toLowerCase().includes(query) ||
+        student.level.toLowerCase().includes(query)
+      );
+
+      studentList.replaceChildren();
+
+      if (filtered.length === 0) {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+
+        cell.colSpan = 5;
+        cell.className = "empty";
+        cell.textContent = students.length
+          ? "No matching student found."
+          : "No records yet. Add a student to get started.";
+
+        row.appendChild(cell);
+        studentList.appendChild(row);
+      }
+
+      filtered.forEach(student => {
+        const row = document.createElement("tr");
+
+        [
+          student.name,
+          student.matric,
+          student.department,
+          student.level
+        ].forEach(value => {
+          const cell = document.createElement("td");
+          cell.textContent = value;
+          row.appendChild(cell);
+        });
+
+        const actionCell = document.createElement("td");
+
+        const editButton = document.createElement("button");
+        editButton.textContent = "Edit";
+        editButton.addEventListener("click", () => {
+          editStudent(student.id);
+        });
+
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        deleteButton.className = "delete-btn";
+        deleteButton.addEventListener("click", () => {
+          deleteStudent(student.id);
+        });
+
+        actionCell.append(editButton, deleteButton);
+        row.appendChild(actionCell);
+        studentList.appendChild(row);
+      });
+
+      updateDashboard();
+    }
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+
+      const student = {
+        name: document.getElementById("name").value.trim(),
+        matric: document.getElementById("matric").value.trim(),
+        department: document.getElementById("department").value,
+        level: document.getElementById("level").value
+      };
+
+      if (students.some(s =>
+        s.matric.toLowerCase() === student.matric.toLowerCase() &&
+        s.id !== editingId
+      )) {
+        alert("That matric number already exists.");
+        return;
+      }
+
+      if (editingId !== null) {
+        students = students.map(s =>
+          s.id === editingId
+            ? { ...student, id: editingId }
+            : s
+        );
+
+        editingId = null;
+
+        document.getElementById("submitBtn").textContent =
+          "Add Student";
+
+        document.getElementById("formTitle").textContent =
+          "Add New Student";
+      } else {
+        students.push({
+          ...student,
+          id: Date.now()
+        });
+      }
+
+      saveStudents();
+      form.reset();
+      renderStudents();
+    });
+
+    function editStudent(id) {
+      const student = students.find(s => s.id === id);
+      if (!student) return;
+
+      document.getElementById("name").value = student.name;
+      document.getElementById("matric").value = student.matric;
+      document.getElementById("department").value =
+        student.department;
+      document.getElementById("level").value = student.level;
+
+      editingId = id;
+
+      document.getElementById("submitBtn").textContent =
+        "Save Changes";
+
+      document.getElementById("formTitle").textContent =
+        "Edit Student";
+
+      document.getElementById("name").focus();
+    }
+
+    function deleteStudent(id) {
+      if (!confirm("Are you sure you want to delete this student?")) {
+        return;
+      }
+
+      students = students.filter(s => s.id !== id);
+
+      if (editingId === id) {
+        editingId = null;
+        form.reset();
+
+        document.getElementById("submitBtn").textContent =
+          "Add Student";
+
+        document.getElementById("formTitle").textContent =
+          "Add New Student";
+      }
+
+      saveStudents();
+      renderStudents();
+    }
+
+    search.addEventListener("input", renderStudents);
+
+    renderStudents();
+  </script>
+
+</body>
+</html>
+
